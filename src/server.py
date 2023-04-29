@@ -1,6 +1,8 @@
 import socket
+# old ip
+# SERVER_IP = '172.20.10.2'
+SERVER_IP = '127.0.0.1'
 
-SERVER_IP = '172.20.10.2'
 SERVER_PORT = 5678
 
 with socket.socket(socket.AF_INET , socket.SOCK_STREAM) as s:
