@@ -52,7 +52,7 @@ def generateRSAKeys():
     """Generate an RSA key pair"""
     # Generate an RSA key pair with a key length of 2048 bits
     key = RSA.generate(2048)
-    # should we use pkcs=8 to be able to have a consistent format for the both keys? Nope, it's not necessary
+    # should we use pkcs=8 to be able to have a consistent format for the both keys
     # check "https://stackoverflow.com/questions/18039401/how-can-i-transform-between-the-two-styles-of-public-key-format-one-begin-rsa"
     private_key = key.export_key()
     public_key = key.publickey().export_key()
@@ -80,9 +80,14 @@ def testEncryption():
     with open('encrypted_file', 'wb') as f:
         f.write(encrypted_data)
     return ascii_key
-
+    # saveKey(key, "Key.key")
 def encryptWithRSA(data, public_key):
     """Encrypt the data using RSA"""
+    # Import the public key
+    # key = RSA.import_key(public_key)
+    # # Encrypt the data
+    # encrypted_data = key.encrypt(data.encode(), 32)
+
     encryptor = PKCS1_OAEP.new(public_key)
     encrypted_data = encryptor.encrypt(data)
     encoded_encrypted_msg = base64.b64encode(encrypted_data)
