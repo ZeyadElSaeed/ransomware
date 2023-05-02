@@ -15,5 +15,8 @@
  command to install libs for the project:
 
 ```
+ pip install pypiwin32
+ pip install requests
+ pip install pycryptodome
  conda install -c conda-forge pycryptodome
 ```
