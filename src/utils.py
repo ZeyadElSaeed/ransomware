@@ -81,31 +81,31 @@ def testEncryption():
         f.write(encrypted_data)
     return ascii_key
     # saveKey(key, "Key.key")
-# def encryptWithRSA(data, public_key):
-#     """Encrypt the data using RSA"""
-#     # Import the public key
-#     # key = RSA.import_key(public_key)
-#     # # Encrypt the data
-#     # encrypted_data = key.encrypt(data.encode(), 32)
-
-#     encryptor = PKCS1_OAEP.new(public_key)
-#     encrypted_data = encryptor.encrypt(data)
-#     encoded_encrypted_msg = base64.b64encode(encrypted_data)
-#     print(encoded_encrypted_msg)
-#     return encoded_encrypted_msg 
 def encryptWithRSA(data, public_key):
     """Encrypt the data using RSA"""
-    # Create an instance of the PKCS1_OAEP encryption scheme using the public key
-    encryptor = PKCS1_OAEP.new(public_key)
+    # Import the public key
+    # key = RSA.import_key(public_key)
+    # # Encrypt the data
+    # encrypted_data = key.encrypt(data.encode(), 32)
 
-    # Convert the data string to bytes
+    encryptor = PKCS1_OAEP.new(public_key)
+    encrypted_data = encryptor.encrypt(data)
+    encoded_encrypted_msg = base64.b64encode(encrypted_data)
+    print(encoded_encrypted_msg)
+    return encoded_encrypted_msg 
+# def encryptWithRSA(data, public_key):
+#     """Encrypt the data using RSA"""
+#     # Create an instance of the PKCS1_OAEP encryption scheme using the public key
+#     encryptor = PKCS1_OAEP.new(public_key)
+
+#     # Convert the data string to bytes
    
 
-    # Use the encryption scheme to encrypt the data
-    ciphertext_bytes = encryptor.encrypt(data)
+#     # Use the encryption scheme to encrypt the data
+#     ciphertext_bytes = encryptor.encrypt(data)
 
-    # Return the ciphertext as a base64-encoded string
-    return base64.b64encode(ciphertext_bytes).decode('utf-8')
+#     # Return the ciphertext as a base64-encoded string
+#     return base64.b64encode(ciphertext_bytes)
 
 def send_to_server(encoded_encrypted_msg):
     SERVER_IP = '127.0.0.1'
