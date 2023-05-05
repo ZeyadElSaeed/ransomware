@@ -112,3 +112,18 @@ def get_emails_from_csv():
     emails = [row['Email'] for row in data]
     return emails
 
+def decrypt_with_RSA(encrypted_data, private_key):
+    """Decrypt the data using RSA"""
+    # Import the private key
+    key = RSA.import_key(private_key)
+    # Decrypt the data
+    decrypted_data = key.decrypt(encrypted_data)
+    return decrypted_data
+
+def decrypt_data(key, encrypted_data):
+    """Decrypt the data using AES-CBC"""
+    iv = encrypted_data[:16]
+    cipher = AES.new(key.encode('utf-8'), AES.MODE_CBC, iv)
+    decrypted_data = cipher.decrypt(encrypted_data[16:])
+    return decrypted_data[:-decrypted_data[-1]]
+

