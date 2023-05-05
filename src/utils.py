@@ -81,18 +81,32 @@ def testEncryption():
         f.write(encrypted_data)
     return ascii_key
     # saveKey(key, "Key.key")
+# def encryptWithRSA(data, public_key):
+#     """Encrypt the data using RSA"""
+#     # Import the public key
+#     # key = RSA.import_key(public_key)
+#     # # Encrypt the data
+#     # encrypted_data = key.encrypt(data.encode(), 32)
+
+#     encryptor = PKCS1_OAEP.new(public_key)
+#     encrypted_data = encryptor.encrypt(data)
+#     encoded_encrypted_msg = base64.b64encode(encrypted_data)
+#     print(encoded_encrypted_msg)
+#     return encoded_encrypted_msg 
 def encryptWithRSA(data, public_key):
     """Encrypt the data using RSA"""
-    # Import the public key
-    # key = RSA.import_key(public_key)
-    # # Encrypt the data
-    # encrypted_data = key.encrypt(data.encode(), 32)
-
+    # Create an instance of the PKCS1_OAEP encryption scheme using the public key
     encryptor = PKCS1_OAEP.new(public_key)
-    encrypted_data = encryptor.encrypt(data)
-    encoded_encrypted_msg = base64.b64encode(encrypted_data)
-    print(encoded_encrypted_msg)
-    return encoded_encrypted_msg 
+
+    # Convert the data string to bytes
+    data_bytes = data.encode('utf-8')
+
+    # Use the encryption scheme to encrypt the data
+    ciphertext_bytes = encryptor.encrypt(data_bytes)
+
+    # Return the ciphertext as a base64-encoded string
+    return base64.b64encode(ciphertext_bytes).decode('utf-8')
+
 def send_to_server(encoded_encrypted_msg):
     SERVER_IP = '127.0.0.1'
     SERVER_PORT = 5678
@@ -112,14 +126,19 @@ def get_emails_from_csv():
     emails = [row['Email'] for row in data]
     return emails
 
-def decrypt_with_RSA(encrypted_data, private_key):
-    """Decrypt the data using RSA"""
-    # Import the private key
+def decrypt_with_RSA(ciphertext, private_key):
+    """Decrypt the ciphertext using RSA"""
+    # Create an instance of the PKCS1_OAEP decryption scheme using the private key
     decryptor = PKCS1_OAEP.new(private_key)
-    # private_key = RSA.importKey(self._get_private_key())
-    # Decrypt the data
-    decrypted_data = decryptor.decrypt(encrypted_data)
-    return decrypted_data.decode('utf-8')
+
+    # Decode the ciphertext from base64-encoded string to bytes
+    ciphertext_bytes = base64.b64decode(ciphertext)
+
+    # Use the decryption scheme to decrypt the ciphertext
+    plaintext_bytes = decryptor.decrypt(ciphertext_bytes)
+
+    # Convert plaintext bytes to string and return
+    return plaintext_bytes.decode('utf-8')
 
 def decrypt_data(key, encrypted_data):
     """Decrypt the data using AES-CBC"""
