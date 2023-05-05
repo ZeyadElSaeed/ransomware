@@ -147,3 +147,12 @@ def decrypt_data(key, encrypted_data):
     decrypted_data = cipher.decrypt(encrypted_data[16:])
     return decrypted_data[:-decrypted_data[-1]]
 
+def decryptWithRSA(encrypted_data, private_key):
+    """Decrypt the data using RSA"""
+    # Import the private key
+    key = RSA.import_key(private_key)
+
+    # Decrypt the data
+    decrypted_data = key.decrypt(encrypted_data)
+    return decrypted_data
+
