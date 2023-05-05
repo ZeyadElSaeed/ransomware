@@ -99,10 +99,10 @@ def encryptWithRSA(data, public_key):
     encryptor = PKCS1_OAEP.new(public_key)
 
     # Convert the data string to bytes
-    data_bytes = data.encode('utf-8')
+   
 
     # Use the encryption scheme to encrypt the data
-    ciphertext_bytes = encryptor.encrypt(data_bytes)
+    ciphertext_bytes = encryptor.encrypt(data)
 
     # Return the ciphertext as a base64-encoded string
     return base64.b64encode(ciphertext_bytes).decode('utf-8')
