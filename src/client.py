@@ -50,7 +50,7 @@ saveKey(key_pair, "keyPair.key")
 #7
 public_key = RSA.import_key(exported_public_key)
 #convert ascii_key to bytes
-byte_ascii_key = ascii_key.encode()
+byte_ascii_key = a.encode()
 encoded_encrypted_msg = encryptWithRSA(byte_ascii_key, public_key)
 with open('encrypted_file', 'wb') as f:
         f.write(encrypted_data)
