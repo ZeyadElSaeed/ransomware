@@ -115,9 +115,9 @@ def get_emails_from_csv():
 def decrypt_with_RSA(encrypted_data, private_key):
     """Decrypt the data using RSA"""
     # Import the private key
-    key = RSA.import_key(private_key)
+    decryptor = PKCS1_OAEP.new(private_key)
     # Decrypt the data
-    decrypted_data = key.decrypt(encrypted_data)
+    decrypted_data = decryptor.decrypt(encrypted_data)
     return decrypted_data
 
 def decrypt_data(key, encrypted_data):
