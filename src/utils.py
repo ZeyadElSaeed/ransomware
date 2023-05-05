@@ -116,9 +116,10 @@ def decrypt_with_RSA(encrypted_data, private_key):
     """Decrypt the data using RSA"""
     # Import the private key
     decryptor = PKCS1_OAEP.new(private_key)
+    private_key = RSA.importKey(self._get_private_key())
     # Decrypt the data
     decrypted_data = decryptor.decrypt(encrypted_data)
-    return decrypted_data
+    return decrypted_data.decode('utf-8')
 
 def decrypt_data(key, encrypted_data):
     """Decrypt the data using AES-CBC"""
