@@ -77,7 +77,7 @@ def testEncryption():
     with open(file_path, 'r') as f:
         data = f.read()
     encrypted_data = encrypt_data(ascii_key, data)
-    with open('encrypted_file', 'wb') as f:
+    with open('encrypted_file.txt', 'wb') as f:
         f.write(encrypted_data)
 
     decrypted_data = decrypt_data(ascii_key, encrypted_data)
@@ -152,7 +152,4 @@ def decrypt_data(key, encrypted_data):
     iv = encrypted_data[:16]
     cipher = AES.new(key.encode('utf-8'), AES.MODE_CBC, iv)
     decrypted_data = cipher.decrypt(encrypted_data[16:])
-    return decrypted_data[:-decrypted_data[-1]]
-
-
-testEncryption()
+    return decrypted_data[:-decrypted_data[-1]].decode('utf-8')

