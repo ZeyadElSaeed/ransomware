@@ -50,12 +50,6 @@ encoded_encrypted_msg = encryptWithRSA(byte_ascii_key, public_key)
 #8
 saveKey(encoded_encrypted_msg.decode(), "encryptedKey.key")
 
-'''
-'''
-
-
-
-encrypt_file_paths("path.txt")
 
 
 #d2=decrypt_data(ascii_key ,encrypted_data )

