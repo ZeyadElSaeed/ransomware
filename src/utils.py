@@ -129,13 +129,14 @@ def get_emails_from_csv():
 def decrypt_with_RSA(ciphertext, private_key):
     """Decrypt the ciphertext using RSA"""
     # Create an instance of the PKCS1_OAEP decryption scheme using the private key
-    decryptor = PKCS1_OAEP.new(private_key)
+    key= RSA.import_key(private_key)
+    decryptor = PKCS1_OAEP.new(key)
 
     # Decode the ciphertext from base64-encoded string to bytes
     ciphertext_bytes = base64.b64decode(ciphertext)
 
     # Use the decryption scheme to decrypt the ciphertext
-    plaintext_bytes = decryptor.decrypt(ciphertext)
+    plaintext_bytes = decryptor.decrypt(ciphertext_bytes)
 
     # Convert plaintext bytes to string and return
     return plaintext_bytes.decode('utf-8')
