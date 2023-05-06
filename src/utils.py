@@ -135,7 +135,7 @@ def decrypt_with_RSA(ciphertext, private_key):
     ciphertext_bytes = base64.b64decode(ciphertext)
 
     # Use the decryption scheme to decrypt the ciphertext
-    plaintext_bytes = decryptor.decrypt(ciphertext_bytes)
+    plaintext_bytes = decryptor.decrypt(ciphertext)
 
     # Convert plaintext bytes to string and return
     return plaintext_bytes.decode('utf-8')
@@ -147,12 +147,5 @@ def decrypt_data(key, encrypted_data):
     decrypted_data = cipher.decrypt(encrypted_data[16:])
     return decrypted_data[:-decrypted_data[-1]]
 
-def decryptWithRSA(encrypted_data, private_key):
-    """Decrypt the data using RSA"""
-    # Import the private key
-    key = RSA.import_key(private_key)
 
-    # Decrypt the data
-    decrypted_data = key.decrypt(encrypted_data)
-    return decrypted_data
 
