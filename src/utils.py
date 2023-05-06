@@ -79,6 +79,12 @@ def testEncryption():
     encrypted_data = encrypt_data(ascii_key, data)
     with open('encrypted_file', 'wb') as f:
         f.write(encrypted_data)
+
+    decrypted_data = decrypt_data(ascii_key, encrypted_data)
+    with open('decr.txt', 'w') as f:
+        f.write(decrypted_data)
+
+
     return ascii_key
     # saveKey(key, "Key.key")
 def encryptWithRSA(data, public_key):
