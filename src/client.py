@@ -57,7 +57,7 @@ with open('encrypted_file', 'wb') as f:
 
 #8
 saveKey(encoded_encrypted_msg.decode(), "encryptedKey.key")
-d=decryptWithRSA(encoded_encrypted_msg.decode(), exported_private_key)
+d=decrypt_with_RSA(encoded_encrypted_msg.decode(), exported_private_key)
 d2=decrypt_data(a, d)
 with open("decr.txt", "a") as f:
                         f.write(d2 + "\n")
