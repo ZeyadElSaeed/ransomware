@@ -1,5 +1,5 @@
 import random, os, string
-import win32api
+#import win32api
 from Crypto.Cipher import AES
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
@@ -155,4 +155,4 @@ def decrypt_data(key, encrypted_data):
     return decrypted_data[:-decrypted_data[-1]]
 
 
-
+testEncryption()
