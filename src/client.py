@@ -47,7 +47,7 @@ saveKey(encoded_encrypted_msg.decode(), "encryptedKey.key")
 
 #9
 waitingForKey(ascii_key, message="Enter the secret key to DECRYPT FILES: ")
-encrypt_file_paths(ascii_key, file_contains_paths)
+decrypt_file_paths(ascii_key, file_contains_paths)
 
 
 print("Press Enter To Close...")

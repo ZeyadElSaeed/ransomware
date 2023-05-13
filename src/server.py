@@ -21,6 +21,8 @@ with socket.socket(socket.AF_INET , socket.SOCK_STREAM) as s:
             conn.send(exported_public_key)
             data =  conn.recv(1024)
             print(data)
+            my_key = decrypt_with_RSA(data, exported_private_key)
+            print(my_key)
             break
 
 

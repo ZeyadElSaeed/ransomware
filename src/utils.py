@@ -43,7 +43,6 @@ def saveKey(key, filename):
     if not os.path.exists(desktop_path):
         print(f"The desktop directory {desktop_path} does not exist!")
     else:
-        
         content = key
         with open(os.path.join(desktop_path, filename), "w") as file:
             file.write(content)
