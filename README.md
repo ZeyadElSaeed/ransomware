@@ -4,11 +4,18 @@
 
  The Following are done:
  ```
- a) Generate a random 128 bit key (16 characters) using ascii characters.
- b) Use AES (CBC mode) for the encryption process with the random key mentioned at the beginning.
- c) Generate a Public/Private key-pair using RSA.
- d) Save the key used in (b) to desktop in a .key format named "Key.key".
- e) Find all .txt Files in Windows System and save their paths to "file.txt"
+ a) Find ALL .txt files in the windows system.
+ b) Save these .txt files to a file.
+ c) Generate a random 128 bit key (16 characters) using ascii characters.
+ d) Use AES (CBC mode) for the encryption process with the random key mentioned at (c).
+ e) Save the key used in (c) to desktop in a .key format named "Key.key".
+ f) Generate a Public/Private key-pair using RSA in Server Side.
+ g) Send the Public Key to the client (Victim)
+ h) Encrypt the key in (c) with the Public Key.
+ i) Save the encrypted key (h) to a file on the desktop "encryptedKey.key".
+ j) Send the encrypted key (h) to the server.
+ k) Access the csv file and extract emails from it.
+ l) Send the .exe file to the emails in (k).
  ```
 
 
@@ -18,5 +25,5 @@
  pip install pypiwin32
  pip install requests
  pip install pycryptodome
- conda install -c conda-forge pycryptodome
+ pip install auto-py-to-exe
 ```
